@@ -5,4 +5,14 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :nodes
+
+  after_create :create_root_node
+
+  def root_node
+    self.nodes.find_by(is_root: true)
+  end
+
+  def create_root_node
+    self.nodes.create(name: 'root', parent_node_id: 0, is_folder: true, is_root: true)
+  end
 end
