@@ -1,14 +1,16 @@
 class NodesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_node, only: [:show, :edit, :update, :destroy]
+  before_action :set_node, only: [:list, :show, :edit, :update, :destroy]
 
-  #TODO /hodes/#{root_node.id}/show へリダイレクト
   def index
-    @nodes = current_user.nodes.all
+    redirect_to list_node_path(current_user.root_node)
   end
 
-  #TODO フォルダ配下のファイル一覧
   def show
+  end
+
+  # フォルダ配下のファイル一覧
+  def list
   end
 
   def new
@@ -19,7 +21,7 @@ class NodesController < ApplicationController
   end
 
   def create
-    @node = current_user.nodes.build(params.require(:node).permit(:name, :file))
+    @node = current_user.nodes.build(params.require(:node).permit(:name, :file, :parent_node_id))
     @node.is_root = false
     if @node.file.nil?
       @node.name = @node.file.file.filename
@@ -30,7 +32,7 @@ class NodesController < ApplicationController
 
     respond_to do |format|
       if @node.save
-        format.html { redirect_to @node, notice: 'Node was successfully created.' }
+        format.html { redirect_to list_node_path(@node.parent_node), notice: 'Node was successfully created.' }
         format.json { render :show, status: :created, location: @node }
       else
         format.html { render :new }

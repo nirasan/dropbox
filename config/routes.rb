@@ -4,6 +4,10 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  resources :nodes
+  resources :nodes do
+    member do
+      get :list
+    end
+  end
 
 end
