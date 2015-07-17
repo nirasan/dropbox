@@ -33,22 +33,18 @@ class NodesController < ApplicationController
     respond_to do |format|
       if @node.save
         format.html { redirect_to list_node_path(@node.parent_node), notice: 'Node was successfully created.' }
-        format.json { render :show, status: :created, location: @node }
       else
         format.html { render :new }
-        format.json { render json: @node.errors, status: :unprocessable_entity }
       end
     end
   end
 
   def update
     respond_to do |format|
-      if @node.update(node_params)
-        format.html { redirect_to @node, notice: 'Node was successfully updated.' }
-        format.json { render :show, status: :ok, location: @node }
+      if @node.update(params.require(:node).permit(:name))
+        format.html { redirect_to list_node_path(@node.parent_node), notice: 'Node was successfully updated.' }
       else
         format.html { render :edit }
-        format.json { render json: @node.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -66,7 +62,4 @@ class NodesController < ApplicationController
       @node = current_user.nodes.find(params[:id])
     end
 
-    def node_params
-      params[:node]
-    end
 end

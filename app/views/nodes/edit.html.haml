@@ -1,7 +1,12 @@
-%h1 Editing node
+%h1 ファイル名変更
 
-= render 'form'
+= simple_form_for(@node) do |f|
+  = f.error_notification
 
-= link_to 'Show', @node
-\|
-= link_to 'Back', nodes_path
+  .form-inputs
+    = f.input :name
+
+  .form-actions
+    = f.button :submit
+
+= link_to 'Back', list_node_path(@node.parent_node)
