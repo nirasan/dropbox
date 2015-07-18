@@ -9,6 +9,7 @@
       %th
       %th
       %th
+      %th
 
   %tbody
     - @node.child_nodes.each do |node|
@@ -21,6 +22,9 @@
             = link_to 'List', list_node_path(node)
           - else
             = link_to 'Download', download_node_path(node)
+        %td
+          - if !node.is_folder
+            = link_to 'Copy', copy_node_path(node), :data => { :confirm => 'Are you sure?' }
         %td= link_to 'Edit', edit_node_path(node)
         %td= link_to 'Destroy', node, :method => :delete, :data => { :confirm => 'Are you sure?' }
 

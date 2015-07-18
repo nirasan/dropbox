@@ -1,6 +1,6 @@
 class NodesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_node, only: [:list, :show, :edit, :update, :destroy, :download]
+  before_action :set_node, only: [:list, :show, :edit, :update, :destroy, :download, :copy]
 
   def index
     redirect_to list_node_path(current_user.root_node)
@@ -64,6 +64,16 @@ class NodesController < ApplicationController
     filepath = @node.file.current_path
     stat = File::stat(filepath)
     send_file(filepath, :filename => @node.file.file.filename, :length => stat.size)
+  end
+
+  def copy
+    respond_to do |format|
+      if @node.create_copy
+        format.html { redirect_to list_node_path(@node.parent_node), notice: 'Node was successfully copied.' }
+      else
+        format.html { redirect_to list_node_path(@node.parent_node), alert: 'Node was unsuccessfully copied.' }
+      end
+    end
   end
 
   private

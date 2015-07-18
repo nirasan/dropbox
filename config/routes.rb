@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     member do
       get :list
       get :download
+      get :copy
     end
   end
 

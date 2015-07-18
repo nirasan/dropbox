@@ -18,4 +18,10 @@ class Node < ActiveRecord::Base
       errors.add(:parent_node_id, "invalid parent node.")
     end
   end
+
+  def create_copy
+    copy = self.dup
+    copy.file = self.file.file
+    copy.save
+  end
 end
