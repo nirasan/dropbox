@@ -35,4 +35,17 @@ class Node < ActiveRecord::Base
     copy.file = self.file.file
     copy.save
   end
+
+  scope :sort_by, -> (param) {
+    if param.is_a?(String)
+      sort_param = {
+        name: 'name ASC',       name_desc: 'name DESC',
+        type: 'is_folder ASC',  type_desc: 'is_folder DESC',
+        date: 'updated_at ASC', date_desc: 'updated_at DESC'
+      }[param.to_sym]
+      if sort_param.present?
+        order(sort_param)
+      end
+    end
+  }
 end

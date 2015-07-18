@@ -11,6 +11,7 @@ class NodesController < ApplicationController
 
   # フォルダ配下のファイル一覧
   def list
+    @nodes = @node.child_nodes.sort_by(params['sort'])
   end
 
   def new

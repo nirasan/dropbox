@@ -4,19 +4,21 @@
   %thead
     %tr
       %th id
-      %th name
-      %th type
+      %th= link_to 'name', list_node_path(@node, sort: params['sort'] == 'name' ? 'name_desc' : 'name')
+      %th= link_to 'type', list_node_path(@node, sort: params['sort'] == 'type' ? 'type_desc' : 'type')
+      %th= link_to 'date', list_node_path(@node, sort: params['sort'] == 'date' ? 'date_desc' : 'date')
       %th
       %th
       %th
       %th
 
   %tbody
-    - @node.child_nodes.each do |node|
+    - @nodes.each do |node|
       %tr
         %td= node.id
         %td= node.name
         %td= node.is_folder ? "Folder" : "File"
+        %th= node.updated_at
         %td
           - if node.is_folder
             = link_to 'List', list_node_path(node)
