@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :nodes
+  has_many :event_logs
 
   after_create :create_root_node
 

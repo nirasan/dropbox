@@ -7,6 +7,10 @@ class Node < ActiveRecord::Base
 
   validate :validate_parent_node
 
+  after_create :event_log_on_create
+  after_update :event_log_on_update
+  after_destroy :event_log_on_destroy
+
   def parent_node
     Node.find(parent_node_id)
   end
@@ -48,4 +52,49 @@ class Node < ActiveRecord::Base
       end
     end
   }
+
+  def get_path (folders = nil)
+    folders ||= self.user.nodes.where(is_folder: true).to_a
+    path = [self]
+    while !path[0].is_root do
+      parent = folders.find{|node| node.id == path[0].parent_node_id}
+      path.unshift(parent)
+    end
+    path
+  end
+
+  def get_path_string (path = nil)
+    path ||= self.get_path
+    path.map{|node| node.name}.join('/')
+  end
+
+  def event_log_on_create
+    description = "「#{self.get_path_string}」を作成しました"
+    self.user.event_logs.create(description: description)
+  end
+
+  def event_log_on_update
+    if self.name_changed? || self.parent_node_id_changed?
+      if self.parent_node_id_changed?
+        before = Node.find(self.parent_node_id_was).get_path_string
+        after = self.parent_node.get_path_string
+      else
+        before = after = self.parent_node.get_path_string
+      end
+      if self.name_changed?
+        before += "/" + self.name_was
+        after  += "/" + self.name
+      else
+        before += "/" + self.name
+        after  += "/" + self.name
+      end
+      description = "「#{before}」を「#{after}」に変更しました"
+      self.user.event_logs.create(description: description)
+    end
+  end
+
+  def event_log_on_destroy
+    description = "「#{self.get_path_string}」を削除しました"
+    self.user.event_logs.create(description: description)
+  end
 end

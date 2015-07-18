@@ -17,4 +17,6 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :event_logs, only: [:index]
+
 end

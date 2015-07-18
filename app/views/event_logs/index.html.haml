@@ -1,0 +1,16 @@
+%h1 ファイル変更履歴
+
+%table.table.table-striped
+  %thead
+    %tr
+      %th Description
+      %th Date
+      %th
+      %th
+
+  %tbody
+    - @event_logs.each do |event_log|
+      %tr
+        %td= event_log.description
+        %td= event_log.updated_at
+
