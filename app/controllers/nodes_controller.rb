@@ -1,6 +1,7 @@
 class NodesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_node, only: [:new_file, :new_folder, :list, :show, :edit, :update, :destroy, :download, :copy]
+  before_action :set_node,
+    only: [:new_file, :new_folder, :list, :show, :edit, :update, :destroy, :download, :copy, :move_folder_list, :move]
 
   def index
     redirect_to list_node_path(current_user.root_node)
@@ -75,6 +76,20 @@ class NodesController < ApplicationController
         format.html { redirect_to list_node_path(@node.parent_node), notice: 'Node was successfully copied.' }
       else
         format.html { redirect_to list_node_path(@node.parent_node), alert: 'Node was unsuccessfully copied.' }
+      end
+    end
+  end
+
+  def move_folder_list
+    @tree = Node.get_folder_tree(current_user)
+  end
+
+  def move
+    respond_to do |format|
+      if @node.move_to(params['node_id'])
+        format.html { redirect_to list_node_path(@node.parent_node), notice: 'Node was successfully moved.' }
+      else
+        format.html { redirect_to list_node_path(@node.parent_node), alert: 'Node was unsuccessfully moved.' }
       end
     end
   end

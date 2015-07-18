@@ -97,4 +97,24 @@ class Node < ActiveRecord::Base
     description = "「#{self.get_path_string}」を削除しました"
     self.user.event_logs.create(description: description)
   end
+
+  def self.get_folder_tree (user)
+    nodes = user.nodes.where(is_folder: true).to_a
+    root_node = nodes.find{|node| node.is_root}
+    {root_node => get_child_node_tree(root_node, nodes)}
+  end
+
+  def self.get_child_node_tree (parent_node, nodes)
+    child_nodes = nodes.select{|node| node.parent_node_id == parent_node.id}
+    tree = {}
+    child_nodes.each do |node|
+      tree[node] = get_child_node_tree(node, nodes)
+    end
+    tree
+  end
+
+  def move_to (parent_node_id)
+    self.update(parent_node_id: parent_node_id)
+  end
+
 end

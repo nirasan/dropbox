@@ -14,6 +14,8 @@ Rails.application.routes.draw do
       get :list
       get :download
       get :copy
+      get :move_folder_list
+      post :move
     end
   end
 

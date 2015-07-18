@@ -1,0 +1,6 @@
+- tree.each do |parent, child_tree|
+  %li
+    = radio_button_tag 'node_id', parent.id
+    = label_tag "node_id_#{parent.id}", parent.name
+    %ul
+      = render "nodes/folder_tree", tree: child_tree
