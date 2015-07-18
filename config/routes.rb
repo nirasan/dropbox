@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resources :nodes do
     member do
       get :list
+      get :download
     end
   end
 

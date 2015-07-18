@@ -1,6 +1,6 @@
 class NodesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_node, only: [:list, :show, :edit, :update, :destroy]
+  before_action :set_node, only: [:list, :show, :edit, :update, :destroy, :download]
 
   def index
     redirect_to list_node_path(current_user.root_node)
@@ -55,6 +55,15 @@ class NodesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to list_node_path(@node.parent_node), notice: 'Node was successfully destroyed.' }
     end
+  end
+
+  def download
+    if @node.is_folder
+      redirect_to list_node_path(@node.parent_node)
+    end
+    filepath = @node.file.current_path
+    stat = File::stat(filepath)
+    send_file(filepath, :filename => @node.file.file.filename, :length => stat.size)
   end
 
   private
