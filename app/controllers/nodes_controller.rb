@@ -14,6 +14,10 @@ class NodesController < ApplicationController
     @nodes = @node.child_nodes.sort_by(params['sort'])
   end
 
+  def search
+    @nodes = current_user.nodes.where('name LIKE ?', "%#{params['search']}%")
+  end
+
   def new
     @node = Node.new
   end

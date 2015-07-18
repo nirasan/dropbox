@@ -1,4 +1,4 @@
-%h1 List
+%h1 Search
 
 = render 'nodes/search_form'
 
@@ -6,9 +6,9 @@
   %thead
     %tr
       %th id
-      %th= link_to 'name', list_node_path(@node, sort: params['sort'] == 'name' ? 'name_desc' : 'name')
-      %th= link_to 'type', list_node_path(@node, sort: params['sort'] == 'type' ? 'type_desc' : 'type')
-      %th= link_to 'date', list_node_path(@node, sort: params['sort'] == 'date' ? 'date_desc' : 'date')
+      %th= link_to 'name', search_nodes_path(search: params['search'], sort: params['sort'] == 'name' ? 'name_desc' : 'name')
+      %th= link_to 'type', search_nodes_path(search: params['search'], sort: params['sort'] == 'type' ? 'type_desc' : 'type')
+      %th= link_to 'date', search_nodes_path(search: params['search'], sort: params['sort'] == 'date' ? 'date_desc' : 'date')
       %th
       %th
       %th
@@ -31,10 +31,4 @@
             = link_to 'Copy', copy_node_path(node), :data => { :confirm => 'Are you sure?' }
         %td= link_to 'Edit', edit_node_path(node)
         %td= link_to 'Destroy', node, :method => :delete, :data => { :confirm => 'Are you sure?' }
-
-%br
-
-= link_to 'ファイルの追加', new_file_node_path(@node)
-\|
-= link_to 'フォルダの追加', new_folder_node_path(@node)
 

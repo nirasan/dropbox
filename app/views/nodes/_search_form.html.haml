@@ -1,0 +1,9 @@
+.row
+  .col-md-4
+    = form_tag(search_nodes_path, method: :get) do
+      .input-group
+        -#= text_field_tag :search, class: "form-control", style: "height:33px;", value: params['search']
+        = text_field_tag :search, params[:search], class: "form-control", style: "height:33px;"
+        %span.input-group-btn
+          %button.btn.btn-primary{type:"submit"}
+            %i.fa.fa-search

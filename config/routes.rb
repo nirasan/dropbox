@@ -5,6 +5,9 @@ Rails.application.routes.draw do
   devise_for :users
 
   resources :nodes do
+    collection do
+      get :search
+    end
     member do
       get :new_file
       get :new_folder
