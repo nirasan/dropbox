@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  resources :nodes do
+  resources :nodes, only: [:index, :create, :edit, :update, :destroy] do
     collection do
       get :search
     end
@@ -13,7 +13,7 @@ Rails.application.routes.draw do
       get :new_folder
       get :list
       get :download
-      get :copy
+      post :copy
       get :move_folder_list
       post :move
     end

@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :event_log do
     user nil
-description "MyText"
+    description "MyText"
   end
 
 end

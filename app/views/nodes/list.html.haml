@@ -34,7 +34,7 @@
             = link_to 'Download', download_node_path(node)
         %td
           - if !node.is_folder
-            = link_to 'Copy', copy_node_path(node), :data => { :confirm => 'Are you sure?' }
+            = link_to 'Copy', copy_node_path(node), :method => :post, :data => { :confirm => 'Are you sure?' }
         %td
           - if !node.is_folder
             = link_to 'Move', move_folder_list_node_path(node)

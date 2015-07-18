@@ -28,6 +28,7 @@ class Node < ActiveRecord::Base
   end
 
   def validate_parent_node
+    return if is_root
     parent_node = user.nodes.find_by(id: parent_node_id, is_folder: true)
     if !parent_node.present?
       errors.add(:parent_node_id, "invalid parent node.")

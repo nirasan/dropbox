@@ -1,13 +1,10 @@
 class NodesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_node,
-    only: [:new_file, :new_folder, :list, :show, :edit, :update, :destroy, :download, :copy, :move_folder_list, :move]
+    only: [:new_file, :new_folder, :list, :edit, :update, :destroy, :download, :copy, :move_folder_list, :move]
 
   def index
     redirect_to list_node_path(current_user.root_node)
-  end
-
-  def show
   end
 
   # フォルダ配下のファイル一覧
@@ -17,10 +14,6 @@ class NodesController < ApplicationController
 
   def search
     @nodes = current_user.nodes.where('name LIKE ?', "%#{params['search']}%")
-  end
-
-  def new
-    @node = Node.new
   end
 
   def new_file
@@ -39,7 +32,7 @@ class NodesController < ApplicationController
       if @node.save
         format.html { redirect_to list_node_path(@node.parent_node), notice: 'Node was successfully created.' }
       else
-        format.html { render :new }
+        format.html { render :new_file }
       end
     end
   end
