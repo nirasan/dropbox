@@ -1,4 +1,9 @@
-%h1 List
+%h3
+  - path = @node.get_path
+  - path.each do |n|
+    = link_to n.name, list_node_path(n)
+    - if path.last != n
+      \/
 
 = render 'nodes/search_form'
 
