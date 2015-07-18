@@ -1,6 +1,6 @@
 class NodesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_node, only: [:list, :show, :edit, :update, :destroy, :download, :copy]
+  before_action :set_node, only: [:new_file, :new_folder, :list, :show, :edit, :update, :destroy, :download, :copy]
 
   def index
     redirect_to list_node_path(current_user.root_node)
@@ -15,6 +15,12 @@ class NodesController < ApplicationController
 
   def new
     @node = Node.new
+  end
+
+  def new_file
+  end
+
+  def new_folder
   end
 
   def edit

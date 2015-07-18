@@ -30,20 +30,6 @@
 
 %br
 
-%h2 ファイルの追加
-= simple_form_for(Node.new) do |f|
-  = f.error_notification
-  .form-inputs
-    = f.input :parent_node_id, as: :hidden, input_html: {value: @node.id}
-    = f.file_field :file
-  .form-actions
-    = f.button :submit
-
-%h2 フォルダの追加
-= simple_form_for(Node.new) do |f|
-  = f.error_notification
-  .form-inputs
-    = f.input :parent_node_id, as: :hidden, input_html: {value: @node.id}
-    = f.input :name
-  .form-actions
-    = f.button :submit
+= link_to 'ファイルの追加', new_file_node_path(@node)
+\|
+= link_to 'フォルダの追加', new_folder_node_path(@node)

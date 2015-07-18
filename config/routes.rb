@@ -6,6 +6,8 @@ Rails.application.routes.draw do
 
   resources :nodes do
     member do
+      get :new_file
+      get :new_folder
       get :list
       get :download
       get :copy
