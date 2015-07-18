@@ -22,6 +22,7 @@ gem "carrierwave"
 gem "fog"
 gem "rmagick"
 gem "kaminari"
+gem 'default_value_for'
 
 #gem 'ransack'
 #gem "gretel"
