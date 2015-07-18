@@ -23,11 +23,12 @@ class NodesController < ApplicationController
   def create
     @node = current_user.nodes.build(params.require(:node).permit(:name, :file, :parent_node_id))
     @node.is_root = false
-    if @node.file.nil?
+    #binding.pry
+    if @node.file.file.nil?
+      @node.is_folder = true
+    else
       @node.name = @node.file.file.filename
       @node.is_folder = false
-    else
-      @node.is_folder = true
     end
 
     respond_to do |format|
@@ -52,8 +53,7 @@ class NodesController < ApplicationController
   def destroy
     @node.destroy
     respond_to do |format|
-      format.html { redirect_to nodes_url, notice: 'Node was successfully destroyed.' }
-      format.json { head :no_content }
+      format.html { redirect_to list_node_path(@node.parent_node), notice: 'Node was successfully destroyed.' }
     end
   end
 
