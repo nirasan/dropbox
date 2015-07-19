@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150718051317) do
+ActiveRecord::Schema.define(version: 20150719014754) do
 
   create_table "event_logs", force: :cascade do |t|
     t.integer  "user_id"
@@ -31,10 +31,23 @@ ActiveRecord::Schema.define(version: 20150718051317) do
     t.datetime "updated_at",     null: false
     t.boolean  "is_root"
     t.string   "file"
+    t.string   "share_path"
+    t.integer  "share_mode"
   end
 
   add_index "nodes", ["parent_node_id"], name: "index_nodes_on_parent_node_id"
+  add_index "nodes", ["share_path"], name: "index_nodes_on_share_path", unique: true
   add_index "nodes", ["user_id"], name: "index_nodes_on_user_id"
+
+  create_table "share_users", force: :cascade do |t|
+    t.integer  "node_id"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "share_users", ["node_id"], name: "index_share_users_on_node_id"
+  add_index "share_users", ["user_id"], name: "index_share_users_on_user_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false

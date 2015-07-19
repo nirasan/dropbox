@@ -19,6 +19,7 @@
       %th
       %th
       %th
+      %th
 
   %tbody
     - @nodes.each do |node|
@@ -38,6 +39,9 @@
         %td
           - if !node.is_folder
             = link_to 'Move', move_folder_list_node_path(node)
+        %td
+          - if !node.is_folder
+            = link_to 'Share', share_setting_node_path(node)
         %td= link_to 'Edit', edit_node_path(node)
         %td= link_to 'Destroy', node, :method => :delete, :data => { :confirm => 'Are you sure?' }
 

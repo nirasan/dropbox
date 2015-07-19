@@ -1,7 +1,9 @@
 class NodesController < ApplicationController
-  before_action :authenticate_user!
-  before_action :set_node,
-    only: [:new_file, :new_folder, :list, :edit, :update, :destroy, :download, :copy, :move_folder_list, :move]
+  before_action :authenticate_user!, except: [:share]
+  before_action :set_node, only: [
+      :new_file, :new_folder, :list, :edit, :update, :destroy, :download, :copy, :move_folder_list, :move,
+      :share_setting, :change_share_setting, :create_share_user, :destroy_share_user,
+    ]
 
   def index
     redirect_to list_node_path(current_user.root_node)
@@ -85,6 +87,54 @@ class NodesController < ApplicationController
         format.html { redirect_to list_node_path(@node.parent_node), alert: 'Node was unsuccessfully moved.' }
       end
     end
+  end
+
+  def share_setting
+  end
+
+  def change_share_setting
+    respond_to do |format|
+      if @node.update(params.require(:node).permit(:share_mode))
+        format.html { redirect_to share_setting_node_path(@node), notice: 'Node was successfully updated.' }
+      else
+        format.html { render :share_setting }
+      end
+    end
+  end
+
+  def create_share_user
+    user = User.find_by(email: params['email'])
+    share_user = ShareUser.new(node: @node, user: user)
+    respond_to do |format|
+      if share_user.save
+        format.html { redirect_to share_setting_node_path(@node), notice: 'ShareUser was successfully created.' }
+      else
+        format.html { render :share_setting }
+      end
+    end
+  end
+
+  def destroy_share_user
+    user = User.find(params['user_id'])
+    share_user = ShareUser.find_by(node: @node, user: user)
+    share_user.destroy
+    respond_to do |format|
+      format.html { redirect_to share_setting_node_path(@node), notice: 'ShareUser was successfully destroyed.' }
+    end
+  end
+
+  def share
+    @node = Node.find_by!(share_path: params['share_path'])
+    if @node.share_mode.private?
+      return head 403
+    elsif @node.share_mode.limited?
+      if user_signed_in?
+        ShareUser.find_by!(node: @node, user: current_user)
+      else
+        return head 403
+      end
+    end
+    download
   end
 
   private

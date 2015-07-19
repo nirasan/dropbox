@@ -1,0 +1,33 @@
+%h1 ファイル共有設定
+
+%h2 ファイル共有パス
+= share_url(share_path: @node.share_path)
+
+%h2 ファイル共有設定変更
+
+= simple_form_for(@node, url:change_share_setting_node_path, method: :post) do |f|
+  = f.error_notification
+  .form-inputs
+    = f.input :share_mode, as: :radio_buttons
+  .form-actions
+    = f.button :submit
+
+%h2 ファイル共有中のユーザー
+
+.row
+  .col-md-4
+    = form_tag(create_share_user_node_path(@node), method: :post) do
+      .input-group
+        = text_field_tag :email, '', class: "form-control", style: "height:33px;"
+        %span.input-group-btn
+          %button.btn.btn-primary{type:"submit"}
+            追加
+
+%table.table.table-striped
+  %tbody
+    - @node.share_users.each do |share_user|
+      %tr
+        %td= share_user.user.email
+        %td= link_to 'Destroy', destroy_share_user_node_path(@node, user_id: share_user.user_id), :method => :post, :data => { :confirm => 'Are you sure?' }
+
+

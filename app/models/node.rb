@@ -1,9 +1,14 @@
 class Node < ActiveRecord::Base
+  extend Enumerize
+
+  has_many :share_users
   belongs_to :user
   mount_uploader :file, UploadFileUploader
 
   default_value_for :is_root, false
   default_value_for :is_folder, false
+
+  enumerize :share_mode, in: {private: 0, public:1, limited:2}, default: :private
 
   validate :validate_parent_node
 
@@ -24,6 +29,7 @@ class Node < ActiveRecord::Base
       self.is_folder = true
     else
       self.name = self.file.file.filename
+      self.share_path = SecureRandom.uuid
     end
   end
 
