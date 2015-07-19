@@ -1,0 +1,23 @@
+%h1= @node.name
+
+%table.table.table-striped
+  %thead
+    %tr
+      %th id
+      %th name
+      %th type
+      %th date
+      %th
+
+  %tbody
+    - @nodes.each do |node|
+      %tr
+        %td= node.id
+        %td= node.name
+        %td= node.is_folder ? "Folder" : "File"
+        %td= node.updated_at
+        %td
+          - if node.is_folder
+            = link_to 'List', share_path(share_path:@parent_node.share_path, node_id:node.id)
+          - else
+            = link_to 'Download', share_path(share_path:@parent_node.share_path, node_id:node.id)

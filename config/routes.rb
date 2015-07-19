@@ -22,7 +22,7 @@ Rails.application.routes.draw do
       post :destroy_share_user
     end
   end
-  get '/share/:share_path', to: 'nodes#share', as: 'share'
+  get '/share/:share_path(/:node_id)', to: 'nodes#share', as: 'share'
 
   resources :event_logs, only: [:index]
   

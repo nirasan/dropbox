@@ -29,8 +29,8 @@ class Node < ActiveRecord::Base
       self.is_folder = true
     else
       self.name = self.file.file.filename
-      self.share_path = SecureRandom.uuid
     end
+    self.share_path = SecureRandom.uuid
   end
 
   def validate_parent_node
@@ -122,6 +122,24 @@ class Node < ActiveRecord::Base
 
   def move_to (parent_node_id)
     self.update(parent_node_id: parent_node_id)
+  end
+
+  def self.can_access_share_node (user, parent, child)
+    if parent.share_mode.private?
+      return false
+    elsif parent.share_mode.limited?
+      if user.present?
+        share_user = ShareUser.find_by(node: parent, user: user)
+        return false unless share_user.present?
+      else
+        return false
+      end
+    end
+    if child.present?
+      child_path = child.get_path
+      return false unless child_path.any?{|node| node == parent}
+    end
+    return true
   end
 
 end

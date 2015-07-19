@@ -124,17 +124,26 @@ class NodesController < ApplicationController
   end
 
   def share
-    @node = Node.find_by!(share_path: params['share_path'])
-    if @node.share_mode.private?
+    @parent_node = Node.find_by!(share_path: params['share_path'])
+    @child_node = Node.find_by(id: params['node_id'])
+    unless Node.can_access_share_node(current_user, @parent_node, @child_node)
       return head 403
-    elsif @node.share_mode.limited?
-      if user_signed_in?
-        ShareUser.find_by!(node: @node, user: current_user)
+    end
+    if @child_node.present?
+      @node = @child_node
+      if @child_node.is_folder
+        @nodes = @child_node.child_nodes
       else
-        return head 403
+        download
+      end
+    else
+      @node = @parent_node
+      if @node.is_folder
+        @nodes = @node.child_nodes
+      else
+        @nodes = [@node]
       end
     end
-    download
   end
 
   private
