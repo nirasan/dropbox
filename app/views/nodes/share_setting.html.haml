@@ -28,6 +28,6 @@
     - @node.share_users.each do |share_user|
       %tr
         %td= share_user.user.email
-        %td= link_to 'Destroy', destroy_share_user_node_path(@node, user_id: share_user.user_id), :method => :post, :data => { :confirm => 'Are you sure?' }
+        %td= link_to '削除', destroy_share_user_node_path(@node, user_id: share_user.user_id), :method => :post, :data => { :confirm => '削除しますか？' }
 
 

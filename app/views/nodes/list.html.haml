@@ -10,10 +10,9 @@
 %table.table.table-striped
   %thead
     %tr
-      %th id
-      %th= link_to 'name', list_node_path(@node, sort: params['sort'] == 'name' ? 'name_desc' : 'name')
-      %th= link_to 'type', list_node_path(@node, sort: params['sort'] == 'type' ? 'type_desc' : 'type')
-      %th= link_to 'date', list_node_path(@node, sort: params['sort'] == 'date' ? 'date_desc' : 'date')
+      %th= link_to '名前', list_node_path(@node, sort: params['sort'] == 'name' ? 'name_desc' : 'name')
+      %th= link_to '種類', list_node_path(@node, sort: params['sort'] == 'type' ? 'type_desc' : 'type')
+      %th= link_to '更新日', list_node_path(@node, sort: params['sort'] == 'date' ? 'date_desc' : 'date')
       %th
       %th
       %th
@@ -24,24 +23,23 @@
   %tbody
     - @nodes.each do |node|
       %tr
-        %td= node.id
         %td= node.name
-        %td= node.is_folder ? "Folder" : "File"
-        %th= node.updated_at
+        %td= node.is_folder ? "フォルダ" : "ファイル"
+        %td= node.updated_at
         %td
           - if node.is_folder
-            = link_to 'List', list_node_path(node)
+            = link_to '一覧表示', list_node_path(node)
           - else
-            = link_to 'Download', download_node_path(node)
+            = link_to 'ダウンロード', download_node_path(node)
         %td
           - if !node.is_folder
-            = link_to 'Copy', copy_node_path(node), :method => :post, :data => { :confirm => 'Are you sure?' }
+            = link_to 'コピー', copy_node_path(node), :method => :post, :data => { :confirm => 'コピーしますか？' }
         %td
           - if !node.is_folder
-            = link_to 'Move', move_folder_list_node_path(node)
-        %td= link_to 'Share', share_setting_node_path(node)
-        %td= link_to 'Edit', edit_node_path(node)
-        %td= link_to 'Destroy', node, :method => :delete, :data => { :confirm => 'Are you sure?' }
+            = link_to '移動', move_folder_list_node_path(node)
+        %td= link_to '共有', share_setting_node_path(node)
+        %td= link_to '名前変更', edit_node_path(node)
+        %td= link_to '削除', node, :method => :delete, :data => { :confirm => '削除しますか？' }
 
 %br
 

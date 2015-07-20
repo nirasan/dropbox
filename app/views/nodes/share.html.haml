@@ -3,21 +3,19 @@
 %table.table.table-striped
   %thead
     %tr
-      %th id
-      %th name
-      %th type
-      %th date
+      %th 名前
+      %th 種類
+      %th 更新日
       %th
 
   %tbody
     - @nodes.each do |node|
       %tr
-        %td= node.id
         %td= node.name
-        %td= node.is_folder ? "Folder" : "File"
+        %td= node.is_folder ? "フォルダ" : "ファイル"
         %td= node.updated_at
         %td
           - if node.is_folder
-            = link_to 'List', share_path(share_path:@parent_node.share_path, node_id:node.id)
+            = link_to '一覧表示', share_path(share_path:@parent_node.share_path, node_id:node.id)
           - else
-            = link_to 'Download', share_path(share_path:@parent_node.share_path, node_id:node.id)
+            = link_to 'ダウンロード', share_path(share_path:@parent_node.share_path, node_id:node.id)

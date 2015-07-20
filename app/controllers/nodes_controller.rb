@@ -31,7 +31,7 @@ class NodesController < ApplicationController
     @node = current_user.nodes.build(params.require(:node).permit(:name, :file, :parent_node_id))
     respond_to do |format|
       if @node.save
-        format.html { redirect_to list_node_path(@node.parent_node), notice: 'Node was successfully created.' }
+        format.html { redirect_to list_node_path(@node.parent_node), notice: '作成に成功しました。' }
       else
         format.html { render :new_file }
       end
@@ -41,7 +41,7 @@ class NodesController < ApplicationController
   def update
     respond_to do |format|
       if @node.update(params.require(:node).permit(:name))
-        format.html { redirect_to list_node_path(@node.parent_node), notice: 'Node was successfully updated.' }
+        format.html { redirect_to list_node_path(@node.parent_node), notice: '名前を変更しました。' }
       else
         format.html { render :edit }
       end
@@ -51,7 +51,7 @@ class NodesController < ApplicationController
   def destroy
     @node.destroy
     respond_to do |format|
-      format.html { redirect_to list_node_path(@node.parent_node), notice: 'Node was successfully destroyed.' }
+      format.html { redirect_to list_node_path(@node.parent_node), notice: '削除しました。' }
     end
   end
 
@@ -67,9 +67,9 @@ class NodesController < ApplicationController
   def copy
     respond_to do |format|
       if @node.create_copy
-        format.html { redirect_to list_node_path(@node.parent_node), notice: 'Node was successfully copied.' }
+        format.html { redirect_to list_node_path(@node.parent_node), notice: 'コピーしました。' }
       else
-        format.html { redirect_to list_node_path(@node.parent_node), alert: 'Node was unsuccessfully copied.' }
+        format.html { redirect_to list_node_path(@node.parent_node), alert: 'コピーに失敗しました。' }
       end
     end
   end
@@ -81,9 +81,9 @@ class NodesController < ApplicationController
   def move
     respond_to do |format|
       if @node.move_to(params['node_id'])
-        format.html { redirect_to list_node_path(@node.parent_node), notice: 'Node was successfully moved.' }
+        format.html { redirect_to list_node_path(@node.parent_node), notice: '移動しました。' }
       else
-        format.html { redirect_to list_node_path(@node.parent_node), alert: 'Node was unsuccessfully moved.' }
+        format.html { redirect_to list_node_path(@node.parent_node), alert: '移動に失敗しました。' }
       end
     end
   end
@@ -94,7 +94,7 @@ class NodesController < ApplicationController
   def change_share_setting
     respond_to do |format|
       if @node.update(params.require(:node).permit(:share_mode))
-        format.html { redirect_to share_setting_node_path(@node), notice: 'Node was successfully updated.' }
+        format.html { redirect_to share_setting_node_path(@node), notice: '共有設定を変更しました。' }
       else
         format.html { render :share_setting }
       end
@@ -106,7 +106,7 @@ class NodesController < ApplicationController
     share_user = ShareUser.new(node: @node, user: user)
     respond_to do |format|
       if share_user.save
-        format.html { redirect_to share_setting_node_path(@node), notice: 'ShareUser was successfully created.' }
+        format.html { redirect_to share_setting_node_path(@node), notice: '共有するユーザーを追加しました。' }
       else
         format.html { render :share_setting }
       end
@@ -118,7 +118,7 @@ class NodesController < ApplicationController
     share_user = ShareUser.find_by(node: @node, user: user)
     share_user.destroy
     respond_to do |format|
-      format.html { redirect_to share_setting_node_path(@node), notice: 'ShareUser was successfully destroyed.' }
+      format.html { redirect_to share_setting_node_path(@node), notice: '共有するユーザーを削除しました。' }
     end
   end
 
