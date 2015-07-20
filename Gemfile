@@ -62,10 +62,10 @@ group :development, :test do
   gem 'hirb-unicode'
 end
 
-group :production, :staging do
+group :production do
   gem 'unicorn'
   gem 'rails_12factor'
-  # gem 'pg'
+  gem 'pg'
 end
 
 group :test do
