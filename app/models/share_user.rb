@@ -4,6 +4,6 @@ class ShareUser < ActiveRecord::Base
 
   after_create :send_notice_mail
   def send_notice_mail
-    NoticeMailer.share(user, node).deliver
+    NoticeMailer.share(user, node).deliver_later
   end
 end

@@ -29,7 +29,6 @@ class NodesController < ApplicationController
 
   def create
     @node = current_user.nodes.build(params.require(:node).permit(:name, :file, :parent_node_id))
-    @node.set_file_or_folder
     respond_to do |format|
       if @node.save
         format.html { redirect_to list_node_path(@node.parent_node), notice: 'Node was successfully created.' }

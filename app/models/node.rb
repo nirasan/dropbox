@@ -12,6 +12,7 @@ class Node < ActiveRecord::Base
 
   validate :validate_parent_node
 
+  before_create :set_file_or_folder
   after_create :event_log_on_create
   after_update :event_log_on_update
   after_destroy :event_log_on_destroy
@@ -31,6 +32,7 @@ class Node < ActiveRecord::Base
       self.name = self.file.file.filename
     end
     self.share_path = SecureRandom.uuid
+    self
   end
 
   def validate_parent_node
