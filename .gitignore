@@ -189,3 +189,6 @@ crashlytics-build.properties
 
 # ADDED
 public/uploads/
+
+# Ignore application configuration
+/config/application.yml
