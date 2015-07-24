@@ -6,6 +6,8 @@ class NodesController < ApplicationController
     ]
 
   def index
+    # listアクションを利用する意味はありますか？indexで良いのでは？nodeのIDが指定されたら(フォルダが選択されたら)showアクションにすれば良さそう
+    # だが人によって意見が変わりそうなので、自分だったらそうするかなー程度。
     redirect_to list_node_path(current_user.root_node)
   end
 
@@ -15,6 +17,7 @@ class NodesController < ApplicationController
   end
 
   def search
+    # 参考までにですが、検索はransackというgemが便利
     @nodes = current_user.nodes.where('name LIKE ?', "%#{params['search']}%")
   end
 
@@ -28,6 +31,7 @@ class NodesController < ApplicationController
   end
 
   def create
+    # paramsを利用するときはxxx_paramsメソッドをよく使います
     @node = current_user.nodes.build(params.require(:node).permit(:name, :file, :parent_node_id))
     respond_to do |format|
       if @node.save
@@ -102,6 +106,7 @@ class NodesController < ApplicationController
   end
 
   def create_share_user
+    # 存在しないユーザのメールアドレスが入力された場合エラーとなる
     user = User.find_by(email: params['email'])
     share_user = ShareUser.new(node: @node, user: user)
     respond_to do |format|
@@ -150,4 +155,7 @@ class NodesController < ApplicationController
       @node = current_user.nodes.find(params[:id])
     end
 
+    #def node_params
+      #params.require(:node).permit(:name, :file, :parent_node_id)
+    #end
 end
