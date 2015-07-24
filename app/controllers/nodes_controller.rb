@@ -32,6 +32,7 @@ class NodesController < ApplicationController
 
   def create
     # paramsを利用するときはxxx_paramsメソッドをよく使います
+    # @node = current_user.nodes.build(node_params)
     @node = current_user.nodes.build(params.require(:node).permit(:name, :file, :parent_node_id))
     respond_to do |format|
       if @node.save
