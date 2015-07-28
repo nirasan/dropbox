@@ -16,6 +16,8 @@ Rails.application.routes.draw do
       post :copy
       get :move_folder_list
       post :move
+      # share_userはModel構造的にもNodeの子なので別にした方が良さそう
+      # 例) resources :share_users, only: [:new, :create, :destroy]
       get :share_setting
       post :change_share_setting
       post :create_share_user

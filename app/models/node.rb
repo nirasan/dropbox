@@ -5,6 +5,8 @@ class Node < ActiveRecord::Base
   belongs_to :user
   mount_uploader :file, UploadFileUploader
 
+  # ポリモーフィックを使えばより簡単にフォルダかファイルデータを区別した管理ができると思います。
+  # 参考サイト:http://ruby-rails.hatenadiary.com/entry/20141207/1417926599
   default_value_for :is_root, false
   default_value_for :is_folder, false
 
@@ -26,18 +28,22 @@ class Node < ActiveRecord::Base
   end
 
   def set_file_or_folder
+    # プロパティを参照するだけならselfはなくても利用できます。self.file.file.nil? → file.file.nil?
+    # ただし代入はできないことに注意。× name = file.file.filename
     if self.file.file.nil?
       self.is_folder = true
     else
       self.name = self.file.file.filename
     end
     self.share_path = SecureRandom.uuid
+    # ↓不要？
     self
   end
 
   def validate_parent_node
     return if is_root
     parent_node = user.nodes.find_by(id: parent_node_id, is_folder: true)
+    # parent_node.blank?の方が可読性が良い
     if !parent_node.present?
       errors.add(:parent_node_id, "invalid parent node.")
     end
@@ -126,6 +132,7 @@ class Node < ActiveRecord::Base
     self.update(parent_node_id: parent_node_id)
   end
 
+  # 返り値がbooleanのみの場合はメソッド名末尾に「?」を付けたほうがわかりやすいと思います。例) self.can_access_share_node?
   def self.can_access_share_node (user, parent, child)
     if parent.share_mode.private?
       return false
@@ -141,7 +148,9 @@ class Node < ActiveRecord::Base
       child_path = child.get_path
       return false unless child_path.any?{|node| node == parent}
     end
+    # returnはなくてもtrueだけで返る
     return true
   end
+# 謎のスペース↓
 
 end

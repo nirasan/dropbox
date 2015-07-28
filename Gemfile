@@ -24,6 +24,7 @@ gem "rmagick"
 gem "kaminari"
 gem 'default_value_for'
 
+# 使っていないgemはコメントアウトではなくて消してしまった方が良い
 #gem 'ransack'
 #gem "gretel"
 #gem 'meta-tags', :require => 'meta_tags'

@@ -14,6 +14,7 @@ class User < ActiveRecord::Base
   end
 
   def create_root_node
+    # rootのデータってそもそも必要でしょうか？user_idに紐付いているのでparent_node_idがnullであればrootにあたいするフォルダ・ファイルは取得できるはず
     self.nodes.create(name: 'root', parent_node_id: 0, is_folder: true, is_root: true)
   end
 end
