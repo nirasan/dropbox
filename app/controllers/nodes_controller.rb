@@ -1,7 +1,7 @@
 class NodesController < ApplicationController
   before_action :authenticate_user!, except: [:share]
   before_action :set_node, only: [
-      :new_file, :new_folder, :list, :edit, :update, :destroy, :download, :copy, :move_folder_list, :move,
+      :new_file, :new_folder, :edit, :update, :destroy, :download, :copy, :move_folder_list, :move,
       :share_setting, :change_share_setting, :create_share_user, :destroy_share_user,
     ]
   
