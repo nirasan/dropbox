@@ -106,9 +106,7 @@ class NodesController < ApplicationController
   end
 
   def create_share_user
-    # 存在しないユーザのメールアドレスが入力された場合エラーとなる
-    # > find_by! に変更して not found になるようにします。
-    user = User.find_by(email: params['email'])
+    user = User.find_by!(email: params['email'])
     share_user = ShareUser.new(node: @node, user: user)
     respond_to do |format|
       if share_user.save
