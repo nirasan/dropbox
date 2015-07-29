@@ -1,7 +1,7 @@
 %h3
   - path = @node.get_path
   - path.each do |n|
-    = link_to n.name, list_node_path(n)
+    = link_to n.name, node_path(n)
     - if path.last != n
       \/
 
@@ -10,9 +10,9 @@
 %table.table.table-striped
   %thead
     %tr
-      %th= link_to '名前', list_node_path(@node, sort: params['sort'] == 'name' ? 'name_desc' : 'name')
-      %th= link_to '種類', list_node_path(@node, sort: params['sort'] == 'type' ? 'type_desc' : 'type')
-      %th= link_to '更新日', list_node_path(@node, sort: params['sort'] == 'date' ? 'date_desc' : 'date')
+      %th= link_to '名前', node_path(@node, sort: params['sort'] == 'name' ? 'name_desc' : 'name')
+      %th= link_to '種類', node_path(@node, sort: params['sort'] == 'type' ? 'type_desc' : 'type')
+      %th= link_to '更新日', node_path(@node, sort: params['sort'] == 'date' ? 'date_desc' : 'date')
       %th
       %th
       %th
@@ -28,7 +28,7 @@
         %td= node.updated_at
         %td
           - if node.is_folder
-            = link_to '一覧表示', list_node_path(node)
+            = link_to '一覧表示', node_path(node)
           - else
             = link_to 'ダウンロード', download_node_path(node)
         %td

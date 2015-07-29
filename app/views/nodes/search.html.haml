@@ -21,7 +21,7 @@
         %th= node.updated_at
         %td
           - if node.is_folder
-            = link_to '一覧表示', list_node_path(node)
+            = link_to '一覧表示', node_path(node)
           - else
             = link_to 'ダウンロード', download_node_path(node)
         %td

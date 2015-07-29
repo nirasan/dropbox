@@ -4,17 +4,11 @@ class NodesController < ApplicationController
       :new_file, :new_folder, :list, :edit, :update, :destroy, :download, :copy, :move_folder_list, :move,
       :share_setting, :change_share_setting, :create_share_user, :destroy_share_user,
     ]
-
-  def index
-    # listアクションを利用する意味はありますか？indexで良いのでは？nodeのIDが指定されたら(フォルダが選択されたら)showアクションにすれば良さそう
-    # だが人によって意見が変わりそうなので、自分だったらそうするかなー程度。
-    # > id 指定なしでルートフォルダーを表示するアクションが欲しかったので index をこのような形にしましたが、ルートフォルダーのリンクを作るヘルパーを作るなどしたほうがよいかもしれませんね。
-    # > list は show でいいのでは？というのはそのとおりだと思います。
-    redirect_to list_node_path(current_user.root_node)
-  end
-
+  
   # フォルダ配下のファイル一覧
-  def list
+  def show
+    id = params[:id] || current_user.root_node.id
+    @node = Node.find(id)
     @nodes = @node.child_nodes.sort_by(params['sort'])
   end
 
@@ -41,7 +35,7 @@ class NodesController < ApplicationController
     @node = current_user.nodes.build(params.require(:node).permit(:name, :file, :parent_node_id))
     respond_to do |format|
       if @node.save
-        format.html { redirect_to list_node_path(@node.parent_node), notice: '作成に成功しました。' }
+        format.html { redirect_to node_path(@node.parent_node), notice: '作成に成功しました。' }
       else
         format.html { render :new_file }
       end
@@ -51,7 +45,7 @@ class NodesController < ApplicationController
   def update
     respond_to do |format|
       if @node.update(params.require(:node).permit(:name))
-        format.html { redirect_to list_node_path(@node.parent_node), notice: '名前を変更しました。' }
+        format.html { redirect_to node_path(@node.parent_node), notice: '名前を変更しました。' }
       else
         format.html { render :edit }
       end
@@ -61,13 +55,13 @@ class NodesController < ApplicationController
   def destroy
     @node.destroy
     respond_to do |format|
-      format.html { redirect_to list_node_path(@node.parent_node), notice: '削除しました。' }
+      format.html { redirect_to node_path(@node.parent_node), notice: '削除しました。' }
     end
   end
 
   def download
     if @node.is_folder
-      redirect_to list_node_path(@node.parent_node)
+      redirect_to node_path(@node.parent_node)
     end
     filepath = @node.file.current_path
     stat = File::stat(filepath)
@@ -77,9 +71,9 @@ class NodesController < ApplicationController
   def copy
     respond_to do |format|
       if @node.create_copy
-        format.html { redirect_to list_node_path(@node.parent_node), notice: 'コピーしました。' }
+        format.html { redirect_to node_path(@node.parent_node), notice: 'コピーしました。' }
       else
-        format.html { redirect_to list_node_path(@node.parent_node), alert: 'コピーに失敗しました。' }
+        format.html { redirect_to node_path(@node.parent_node), alert: 'コピーに失敗しました。' }
       end
     end
   end
@@ -91,9 +85,9 @@ class NodesController < ApplicationController
   def move
     respond_to do |format|
       if @node.move_to(params['node_id'])
-        format.html { redirect_to list_node_path(@node.parent_node), notice: '移動しました。' }
+        format.html { redirect_to node_path(@node.parent_node), notice: '移動しました。' }
       else
-        format.html { redirect_to list_node_path(@node.parent_node), alert: '移動に失敗しました。' }
+        format.html { redirect_to node_path(@node.parent_node), alert: '移動に失敗しました。' }
       end
     end
   end

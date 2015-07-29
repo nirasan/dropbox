@@ -1,10 +1,10 @@
 Rails.application.routes.draw do
 
-  root to: 'nodes#index'
+  root to: 'nodes#show'
 
   devise_for :users
 
-  resources :nodes, only: [:index, :create, :edit, :update, :destroy] do
+  resources :nodes, only: [:show, :create, :edit, :update, :destroy] do
     collection do
       get :search
     end
