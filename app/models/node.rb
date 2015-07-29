@@ -128,9 +128,7 @@ class Node < ActiveRecord::Base
     self.update(parent_node_id: parent_node_id)
   end
 
-  # 返り値がbooleanのみの場合はメソッド名末尾に「?」を付けたほうがわかりやすいと思います。例) self.can_access_share_node?
-  # > そのとおりですね。修正します。
-  def self.can_access_share_node (user, parent, child)
+  def self.can_access_share_node? (user, parent, child)
     if parent.share_mode.private?
       return false
     elsif parent.share_mode.limited?

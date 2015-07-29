@@ -129,7 +129,7 @@ class NodesController < ApplicationController
   def share
     @parent_node = Node.find_by!(share_path: params['share_path'])
     @child_node = Node.find_by(id: params['node_id'])
-    unless Node.can_access_share_node(current_user, @parent_node, @child_node)
+    unless Node.can_access_share_node?(current_user, @parent_node, @child_node)
       return head 403
     end
     if @child_node.present?

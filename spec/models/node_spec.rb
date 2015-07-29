@@ -87,34 +87,34 @@ RSpec.describe Node, type: :model do
 
       it "非公開" do
         folder2.update(share_mode: 0)
-        expect(Node.can_access_share_node(nil, folder2, nil)).to eq false
-        expect(Node.can_access_share_node(user2, folder2, nil)).to eq false
-        expect(Node.can_access_share_node(user3, folder2, nil)).to eq false
-        expect(Node.can_access_share_node(nil, folder2, file2)).to eq false
-        expect(Node.can_access_share_node(user2, folder2, file2)).to eq false
-        expect(Node.can_access_share_node(user3, folder2, file2)).to eq false
+        expect(Node.can_access_share_node?(nil, folder2, nil)).to eq false
+        expect(Node.can_access_share_node?(user2, folder2, nil)).to eq false
+        expect(Node.can_access_share_node?(user3, folder2, nil)).to eq false
+        expect(Node.can_access_share_node?(nil, folder2, file2)).to eq false
+        expect(Node.can_access_share_node?(user2, folder2, file2)).to eq false
+        expect(Node.can_access_share_node?(user3, folder2, file2)).to eq false
       end
 
       it "全体公開" do
         folder2.update(share_mode: 1)
-        expect(Node.can_access_share_node(nil, folder2, nil)).to eq true
-        expect(Node.can_access_share_node(user2, folder2, nil)).to eq true
-        expect(Node.can_access_share_node(user3, folder2, nil)).to eq true
-        expect(Node.can_access_share_node(nil, folder2, file2)).to eq true
-        expect(Node.can_access_share_node(user2, folder2, file2)).to eq true
-        expect(Node.can_access_share_node(user3, folder2, file2)).to eq true
+        expect(Node.can_access_share_node?(nil, folder2, nil)).to eq true
+        expect(Node.can_access_share_node?(user2, folder2, nil)).to eq true
+        expect(Node.can_access_share_node?(user3, folder2, nil)).to eq true
+        expect(Node.can_access_share_node?(nil, folder2, file2)).to eq true
+        expect(Node.can_access_share_node?(user2, folder2, file2)).to eq true
+        expect(Node.can_access_share_node?(user3, folder2, file2)).to eq true
       end
 
       it "限定公開" do
         folder2.update(share_mode: 2)
         create(:share_user, user:user2, node:folder2)
-        expect(Node.can_access_share_node(user2, folder2, nil)).to eq true
-        expect(Node.can_access_share_node(user2, folder2, file2)).to eq true
-        expect(Node.can_access_share_node(user2, folder2, folder4)).to eq true
-        expect(Node.can_access_share_node(user2, folder2, file3)).to eq true
-        expect(Node.can_access_share_node(user2, folder3, nil)).to eq false
-        expect(Node.can_access_share_node(user2, folder1, nil)).to eq false
-        expect(Node.can_access_share_node(user3, folder2, nil)).to eq false
+        expect(Node.can_access_share_node?(user2, folder2, nil)).to eq true
+        expect(Node.can_access_share_node?(user2, folder2, file2)).to eq true
+        expect(Node.can_access_share_node?(user2, folder2, folder4)).to eq true
+        expect(Node.can_access_share_node?(user2, folder2, file3)).to eq true
+        expect(Node.can_access_share_node?(user2, folder3, nil)).to eq false
+        expect(Node.can_access_share_node?(user2, folder1, nil)).to eq false
+        expect(Node.can_access_share_node?(user3, folder2, nil)).to eq false
       end
     end
   end
