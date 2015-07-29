@@ -1,7 +1,7 @@
 class NodesController < ApplicationController
   before_action :authenticate_user!, except: [:share]
   before_action :set_node, only: [
-      :new_file, :new_folder, :edit, :update, :destroy, :download, :copy, :move_folder_list, :move,
+      :edit, :update, :destroy, :download, :copy, :move_folder_list, :move,
       :share_setting, :change_share_setting, :create_share_user, :destroy_share_user,
     ]
   
@@ -20,24 +20,26 @@ class NodesController < ApplicationController
   end
 
   def new_file
+    @parent_node = Node.find(params[:id])
+    @node = Node.new(is_folder: false, parent_node_id: @parent_node.id)
   end
 
   def new_folder
+    @parent_node = Node.find(params[:id])
+    @node = Node.new(is_folder: true, parent_node_id: @parent_node.id)
   end
 
   def edit
   end
 
   def create
-    # paramsを利用するときはxxx_paramsメソッドをよく使います
-    # @node = current_user.nodes.build(node_params)
-    # > create と update で許可したいパラメータが異なるため、それぞれで xxx_params を展開した結果このような書き方になっています。
-    @node = current_user.nodes.build(params.require(:node).permit(:name, :file, :parent_node_id))
+    @node = current_user.nodes.build(params.require(:node).permit(:name, :file, :is_folder, :parent_node_id))
     respond_to do |format|
       if @node.save
         format.html { redirect_to node_path(@node.parent_node), notice: '作成に成功しました。' }
       else
-        format.html { render :new_file }
+        @parent_node = Node.find(@node.parent_node_id)
+        format.html { render @node.is_folder ? :new_folder : :new_file }
       end
     end
   end

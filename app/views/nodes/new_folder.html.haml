@@ -1,10 +1,11 @@
 %h1 フォルダの追加
-= simple_form_for(Node.new) do |f|
+= simple_form_for(@node) do |f|
   = f.error_notification
   .form-inputs
-    = f.input :parent_node_id, as: :hidden, input_html: {value: @node.id}
+    = f.input :is_folder, as: :hidden
+    = f.input :parent_node_id, as: :hidden
     = f.input :name
   .form-actions
     = f.button :submit
 
-= link_to '戻る', node_path(@node.id)
+= link_to '戻る', node_path(@parent_node)

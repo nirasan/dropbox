@@ -14,8 +14,12 @@ class Node < ActiveRecord::Base
   enumerize :share_mode, in: {private: 0, public:1, limited:2}, default: :private
 
   validate :validate_parent_node
+  #validate :validate_file, unless: is_folder
+  validates :file, presence: true, unless: :is_folder
+  validates :name, presence: true, if: :is_folder
 
-  before_create :set_file_or_folder
+  before_create :set_share_path
+  before_create :set_name, unless: :is_folder
   after_create :event_log_on_create
   after_update :event_log_on_update
   after_destroy :event_log_on_destroy
@@ -28,12 +32,11 @@ class Node < ActiveRecord::Base
     Node.where(parent_node_id: id)
   end
 
-  def set_file_or_folder
-    if file.file.nil?
-      self.is_folder = true
-    else
-      self.name = file.file.filename
-    end
+  def set_name
+    self.name = file.file.filename
+  end
+
+  def set_share_path
     self.share_path = SecureRandom.uuid
   end
 
@@ -42,6 +45,12 @@ class Node < ActiveRecord::Base
     parent_node = user.nodes.find_by(id: parent_node_id, is_folder: true)
     if parent_node.blank?
       errors.add(:parent_node_id, "invalid parent node.")
+    end
+  end
+
+  def validate_file
+    if file.file.blank?
+      errors.add(:file, "ファイルを指定してください")
     end
   end
 
