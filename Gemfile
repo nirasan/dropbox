@@ -24,16 +24,6 @@ gem "rmagick"
 gem "kaminari"
 gem 'default_value_for'
 
-# 使っていないgemはコメントアウトではなくて消してしまった方が良い
-# > そのとおりですね。削除します。
-#gem 'ransack'
-#gem "gretel"
-#gem 'meta-tags', :require => 'meta_tags'
-#gem 'sprockets'
-#gem 'squeel'
-#gem 'inherited_resources'
-#gem 'dekiru'
-
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller', :platforms=>[:mri_19, :mri_20, :rbx]
