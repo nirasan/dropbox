@@ -29,26 +29,18 @@ class Node < ActiveRecord::Base
   end
 
   def set_file_or_folder
-    # プロパティを参照するだけならselfはなくても利用できます。self.file.file.nil? → file.file.nil?
-    # ただし代入はできないことに注意。× name = file.file.filename
-    # > ありがとうございます。self.PROPERTY_NAME がゲッターセッターであるという理解ができていなかったので、それを意識して今後は使っていきたいと思います。
-    if self.file.file.nil?
+    if file.file.nil?
       self.is_folder = true
     else
-      self.name = self.file.file.filename
+      self.name = file.file.filename
     end
     self.share_path = SecureRandom.uuid
-    # ↓不要？
-    # > 途中で呼び出し方が変わった時に修正忘れていたものです。削除します。
-    self
   end
 
   def validate_parent_node
     return if is_root
     parent_node = user.nodes.find_by(id: parent_node_id, is_folder: true)
-    # parent_node.blank?の方が可読性が良い
-    # > そのとおりですね。修正します。
-    if !parent_node.present?
+    if parent_node.blank?
       errors.add(:parent_node_id, "invalid parent node.")
     end
   end
@@ -158,7 +150,4 @@ class Node < ActiveRecord::Base
     # > 数行程度のメソッドだったり、フローが一直線で単純なものなら return は不要とは思いますが、基準が曖昧なのでソニックガーデンで使用しているコーディング規約がありましたら教えていただきたいです。
     return true
   end
-# 謎のスペース↓
-# > 削除します
-
 end
