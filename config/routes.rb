@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       post :move
       # share_userはModel構造的にもNodeの子なので別にした方が良さそう
       # 例) resources :share_users, only: [:new, :create, :destroy]
+      # > create_share_user, destroy_share_user は意味的に share_user_controller に分けたほうがいいですね。
       get :share_setting
       post :change_share_setting
       post :create_share_user

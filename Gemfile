@@ -25,6 +25,7 @@ gem "kaminari"
 gem 'default_value_for'
 
 # 使っていないgemはコメントアウトではなくて消してしまった方が良い
+# > そのとおりですね。削除します。
 #gem 'ransack'
 #gem "gretel"
 #gem 'meta-tags', :require => 'meta_tags'

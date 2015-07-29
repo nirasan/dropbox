@@ -8,6 +8,8 @@ class NodesController < ApplicationController
   def index
     # listアクションを利用する意味はありますか？indexで良いのでは？nodeのIDが指定されたら(フォルダが選択されたら)showアクションにすれば良さそう
     # だが人によって意見が変わりそうなので、自分だったらそうするかなー程度。
+    # > id 指定なしでルートフォルダーを表示するアクションが欲しかったので index をこのような形にしましたが、ルートフォルダーのリンクを作るヘルパーを作るなどしたほうがよいかもしれませんね。
+    # > list は show でいいのでは？というのはそのとおりだと思います。
     redirect_to list_node_path(current_user.root_node)
   end
 
@@ -18,6 +20,8 @@ class NodesController < ApplicationController
 
   def search
     # 参考までにですが、検索はransackというgemが便利
+    # > 存在は知っていましたが単純な検索なので不要と考えました。
+    # > 改めて確認したところ、空白区切りの複数単語検索をしたい場合などは、今回の程度の検索でも導入したほうが便利そうですね。
     @nodes = current_user.nodes.where('name LIKE ?', "%#{params['search']}%")
   end
 
@@ -33,6 +37,7 @@ class NodesController < ApplicationController
   def create
     # paramsを利用するときはxxx_paramsメソッドをよく使います
     # @node = current_user.nodes.build(node_params)
+    # > create と update で許可したいパラメータが異なるため、それぞれで xxx_params を展開した結果このような書き方になっています。
     @node = current_user.nodes.build(params.require(:node).permit(:name, :file, :parent_node_id))
     respond_to do |format|
       if @node.save
@@ -108,6 +113,7 @@ class NodesController < ApplicationController
 
   def create_share_user
     # 存在しないユーザのメールアドレスが入力された場合エラーとなる
+    # > find_by! に変更して not found になるようにします。
     user = User.find_by(email: params['email'])
     share_user = ShareUser.new(node: @node, user: user)
     respond_to do |format|

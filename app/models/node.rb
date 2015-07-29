@@ -7,6 +7,7 @@ class Node < ActiveRecord::Base
 
   # ポリモーフィックを使えばより簡単にフォルダかファイルデータを区別した管理ができると思います。
   # 参考サイト:http://ruby-rails.hatenadiary.com/entry/20141207/1417926599
+  # > ポリモーフィックリレーション知りませんでした。便利そうですね。
   default_value_for :is_root, false
   default_value_for :is_folder, false
 
@@ -30,6 +31,7 @@ class Node < ActiveRecord::Base
   def set_file_or_folder
     # プロパティを参照するだけならselfはなくても利用できます。self.file.file.nil? → file.file.nil?
     # ただし代入はできないことに注意。× name = file.file.filename
+    # > ありがとうございます。self.PROPERTY_NAME がゲッターセッターであるという理解ができていなかったので、それを意識して今後は使っていきたいと思います。
     if self.file.file.nil?
       self.is_folder = true
     else
@@ -37,6 +39,7 @@ class Node < ActiveRecord::Base
     end
     self.share_path = SecureRandom.uuid
     # ↓不要？
+    # > 途中で呼び出し方が変わった時に修正忘れていたものです。削除します。
     self
   end
 
@@ -44,6 +47,7 @@ class Node < ActiveRecord::Base
     return if is_root
     parent_node = user.nodes.find_by(id: parent_node_id, is_folder: true)
     # parent_node.blank?の方が可読性が良い
+    # > そのとおりですね。修正します。
     if !parent_node.present?
       errors.add(:parent_node_id, "invalid parent node.")
     end
@@ -133,6 +137,7 @@ class Node < ActiveRecord::Base
   end
 
   # 返り値がbooleanのみの場合はメソッド名末尾に「?」を付けたほうがわかりやすいと思います。例) self.can_access_share_node?
+  # > そのとおりですね。修正します。
   def self.can_access_share_node (user, parent, child)
     if parent.share_mode.private?
       return false
@@ -149,8 +154,11 @@ class Node < ActiveRecord::Base
       return false unless child_path.any?{|node| node == parent}
     end
     # returnはなくてもtrueだけで返る
+    # > 最後の式の値が返るのは理解しているのですが、このメソッドのように真偽値を返すもので途中でreturnで抜けていく記述があるものは、最後の式でもreturnをつけたほうが読み心地がよい気がしてつけています。
+    # > 数行程度のメソッドだったり、フローが一直線で単純なものなら return は不要とは思いますが、基準が曖昧なのでソニックガーデンで使用しているコーディング規約がありましたら教えていただきたいです。
     return true
   end
 # 謎のスペース↓
+# > 削除します
 
 end
